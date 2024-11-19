@@ -30,11 +30,11 @@
             border: 2px solid black;
             border-radius: 10px;
             overflow: hidden;
+            cursor: pointer;
         }
 
         #crow {
             width: 150px;
-            cursor: pointer;
             position: absolute;
             left: 50%;
             top: 50%;
@@ -95,7 +95,6 @@
     </div>
 
     <script>
-        const crow = document.getElementById('crow');
         const gameArea = document.getElementById('game-area');
         const startBtn = document.getElementById('start-btn');
         const timerDisplay = document.getElementById('timer');
@@ -106,13 +105,13 @@
         let gameInterval;
 
         // 生成金币
-        function spawnCoins() {
+        function spawnCoins(x, y) {
             for (let i = 0; i < 10; i++) {
                 const coin = document.createElement('img');
                 coin.src = 'coin.png';
                 coin.className = 'coin';
-                coin.style.left = `${Math.random() * 100}%`;
-                coin.style.top = `${Math.random() * 100}%`;
+                coin.style.left = `${x + Math.random() * 50 - 25}px`; // 随机位置
+                coin.style.top = `${y + Math.random() * 50 - 25}px`;
                 gameArea.appendChild(coin);
 
                 // 移除金币
@@ -122,11 +121,14 @@
             }
         }
 
-        // 点击乌鸦事件
-        crow.addEventListener('click', () => {
+        // 点击屏幕事件
+        gameArea.addEventListener('click', (e) => {
             if (timer > 0) {
                 clickCount++;
-                spawnCoins();
+                const rect = gameArea.getBoundingClientRect();
+                const x = e.clientX - rect.left; // 点击的X位置相对游戏区域
+                const y = e.clientY - rect.top; // 点击的Y位置相对游戏区域
+                spawnCoins(x, y);
             }
         });
 
